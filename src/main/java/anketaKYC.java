@@ -29,7 +29,7 @@ import java.util.Base64;
 
 public class anketaKYC {
 
-    public class KycConnectApplication {
+    public static class KycConnectApplication {
 
         public static void main(String[] args) throws IOException, InterruptedException, ParserConfigurationException, SAXException, TransformerException {
             // https://mkyong.com/logging/slf4j-logback-tutorial/
@@ -63,7 +63,7 @@ public class anketaKYC {
             //
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new InputSource(new StringReader(response.body())));;
+            Document doc = builder.parse(new InputSource(new StringReader(response.body())));
 //
 //
 //            NodeList nodeList = doc.getElementsByTagName("employee");
@@ -81,7 +81,7 @@ public class anketaKYC {
 //                }
 //            }
             DOMSource domSource = new DOMSource(doc);
-            StreamResult streamResult = new StreamResult(new File("company.xml"));
+            StreamResult streamResult = new StreamResult(new File(ID_KYC +".xml"));
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.transform(domSource, streamResult);
@@ -102,9 +102,7 @@ public class anketaKYC {
 
             DocumentBuilder builder = dbf.newDocumentBuilder();
 
-            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
-
-            return doc;
+            return builder.parse(new InputSource(new StringReader(xmlString)));
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
