@@ -8,12 +8,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -53,33 +51,27 @@ public class anketaKYC {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            logger.info("{}", response.body());
+        //    logger.info("{}", response.body());
             logger.debug("End APP");
 
-            //
-
-//            Document document = convertStringToXml(response.body());
-//            System.out.println(document.toString());
-            //
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(new InputSource(new StringReader(response.body())));
 //
 //
-//            NodeList nodeList = doc.getElementsByTagName("employee");
-//            for (int i = 0; i < nodeList.getLength(); i++) {
-//                Node node = nodeList.item(i);
-//                Element element = (Element) node;
-//                if (Node.ELEMENT_NODE == node.getNodeType()) {
-//                    //Element element = (Element) node;
-//                    if (Node.ELEMENT_NODE == node.getNodeType()) {
-//                        //Element element = (Element) node;
-//                        if (element.getAttribute("id").equals("2")) {
-//                            element.getElementsByTagName("tool").item(0).setTextContent("124562");
-//                        }
-//                    }
-//                }
-//            }
+            NodeList nodeList = doc.getDocumentElement().getChildNodes();
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+
+                    if (Node.ELEMENT_NODE == node.getNodeType()) {
+                        Element element = (Element) node;
+                        if (element.getFirstChild().equals("title")) {
+                           logger.info("{}", element.getElementsByTagName("title").item(1).getTextContent());
+                        }
+                    }
+
+                    logger.info("{}", node.getNodeName());
+            }
             DOMSource domSource = new DOMSource(doc);
             StreamResult streamResult = new StreamResult(new File(ID_KYC +".xml"));
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
