@@ -1,10 +1,7 @@
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -60,17 +57,28 @@ public class anketaKYC {
 //
 //
             NodeList nodeList = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodeList.getLength(); i++) {
+            for (int i = 0; i < nodeList.getLength()-1; i++) {
                 Node node = nodeList.item(i);
 
-                    if (Node.ELEMENT_NODE == node.getNodeType()) {
-                        Element element = (Element) node;
-                        if (element.getFirstChild().equals("title")) {
-                           logger.info("{}", element.getElementsByTagName("title").item(1).getTextContent());
-                        }
-                    }
+                System.out.println("\nCurrent Element :" + node.getNextSibling().getNodeName());
 
-                    logger.info("{}", node.getNodeName());
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) node.getNextSibling();
+
+                        System.out.println("Title Name : "
+                                + eElement
+                                .getElementsByTagName("title")
+                                .item(0)
+                                .getTextContent());
+
+                        System.out.println("Value Name : "
+                                + eElement
+                                .getElementsByTagName("value")
+                                .item(0)
+                                .getTextContent());
+
+                }
+
             }
             DOMSource domSource = new DOMSource(doc);
             StreamResult streamResult = new StreamResult(new File(ID_KYC +".xml"));
